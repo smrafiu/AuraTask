@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>AuraTask</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<div class="app-wrap">
+
+<!-- ═══ SIDEBAR ═══ -->
+<nav id="sidebar">
+  <div class="logo-wrap">
+    <div class="logo-ico"><i class="fa-solid fa-layer-group"></i></div>
+    <div>
+      <div class="logo-txt">AuraTask</div>
+      <div class="logo-sub">Task Manager</div>
+    </div>
+  </div>
+
+  <div class="nav-scroll">
+    <div class="nav-lbl">Overview</div>
+    <div class="nav-item active" onclick="goPage('tasks',this)">
+      <i class="fa-solid fa-house"></i> Dashboard
+      <span class="nav-badge" id="nb-pending">0</span>
+    </div>
+    <div class="nav-item" onclick="goPage('analytics',this)">
+      <i class="fa-solid fa-chart-line"></i> Analytics
+    </div>
+
+    <div class="nav-lbl">Workspace</div>
+    <div class="nav-item" onclick="goPage('habits',this)">
+      <i class="fa-solid fa-fire"></i> Habits
+      <span class="nav-badge ok" id="nb-habit">—</span>
+    </div>
+    <div class="nav-item" onclick="goPage('notes',this)">
+      <i class="fa-regular fa-note-sticky"></i> Notes
+      <span class="nav-badge" id="nb-notes">0</span>
+    </div>
+
+    <div class="nav-lbl">System</div>
+    <div class="nav-item" onclick="goPage('settings',this)">
+      <i class="fa-solid fa-sliders"></i> Settings
+    </div>
+  </div>
+
+  <div class="sb-footer">
+    <div class="user-pill" onclick="goPage('settings',document.querySelector('.nav-item:last-of-type'))">
+      <div class="user-av" id="ua-av"><span id="ua-init">AU</span></div>
+      <div class="user-info">
+        <div class="user-nm" id="ua-name">AuraUser</div>
+      </div>
+      <i class="fa-solid fa-ellipsis-vertical user-menu"></i>
+    </div>
+  </div>
+</nav>
+<div class="sb-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
+
+<!-- ═══ MAIN ═══ -->
+<div id="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <button class="sb-toggle-btn icon-btn" onclick="toggleSidebar()">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="topbar-info">
+      <div class="topbar-page" id="tb-page">Dashboard</div>
+      <div class="topbar-date" id="tb-date"></div>
+    </div>
+    <div class="search-wrap">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" placeholder="Search…" id="g-search" oninput="doSearch(this.value)"/>
+    </div>
+    <div class="topbar-btns">
+      <button class="icon-btn" onclick="openFocus()" title="Focus Mode">
+        <i class="fa-solid fa-crosshairs"></i>
+      </button>
+      <button class="icon-btn" onclick="toast('All notifications read','info')">
+        <i class="fa-solid fa-bell"></i>
+      </button>
+      <button class="btn-primary" onclick="openTaskModal()">
+        <i class="fa-solid fa-plus"></i><span class="btn-label">Add Task</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div id="content-area">
+
+    <!-- ══ PAGE: DASHBOARD ══ -->
+    <div id="pg-tasks" class="page-wrap active">
+
+      <div class="stats-grid">
+        <div class="stat-card sc-blue">
+          <div class="stat-ico si-blue"><i class="fa-solid fa-list-check"></i></div>
+          <div class="stat-val" id="s-total">0</div>
+          <div class="stat-lbl">Total Tasks</div>
+          <div class="stat-note ok"><i class="fa-solid fa-clock-rotate-left"></i> All time</div>
+        </div>
+        <div class="stat-card sc-warn">
+          <div class="stat-ico si-warn"><i class="fa-solid fa-hourglass-half"></i></div>
+          <div class="stat-val" id="s-pending">0</div>
+          <div class="stat-lbl">Pending</div>
+          <div class="stat-note" id="s-ov-note"><i class="fa-solid fa-circle-info"></i> 0 overdue</div>
+        </div>
+        <div class="stat-card sc-green">
+          <div class="stat-ico si-green"><i class="fa-solid fa-circle-check"></i></div>
+          <div class="stat-val" id="s-done">0</div>
+          <div class="stat-lbl">Completed</div>
+          <div class="stat-note ok"><i class="fa-solid fa-trophy"></i> Great job</div>
+        </div>
+        <div class="stat-card sc-purple">
+          <div class="stat-ico si-purple"><i class="fa-solid fa-bolt"></i></div>
+          <div class="stat-val" id="s-rate">0%</div>
+          <div class="stat-lbl">Completion Rate</div>
+          <div class="stat-note"><i class="fa-solid fa-bullseye"></i> Today's goal</div>
+        </div>
+      </div>
+
+      <div class="prog-box">
+        <div class="prog-row">
+          <div class="prog-title"><i class="fa-solid fa-bars-progress"></i> Today's Progress</div>
+          <span class="prog-count" id="s-prog-val">0 / 0 tasks</span>
+        </div>
+        <div class="prog-track"><div class="prog-fill" id="prog-bar" style="width:0%"></div></div>
+      </div>
+
+      <div class="view-tabs">
+        <div class="view-tab active" onclick="switchView('list',this)"><i class="fa-solid fa-list"></i> List</div>
+        <div class="view-tab" onclick="switchView('kanban',this)"><i class="fa-solid fa-table-columns"></i> Kanban</div>
+        <div class="view-tab" onclick="switchView('calendar',this)"><i class="fa-solid fa-calendar-days"></i> Calendar</div>
+      </div>
+
+      <div class="filter-bar" id="filter-bar">
+        <select class="fsel" id="f-cat" onchange="renderTasks()">
+          <option value="all">All Categories</option>
+          <option value="work">Work</option>
+          <option value="personal">Personal</option>
+          <option value="health">Health</option>
+          <option value="learning">Learning</option>
+          <option value="finance">Finance</option>
+          <option value="other">Other</option>
+        </select>
+        <select class="fsel" id="f-pri" onchange="renderTasks()">
+          <option value="all">All Priority</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+        <button class="fbtn" id="fb-today" onclick="toggleF('Today')"><i class="fa-solid fa-sun"></i> Today</button>
+        <button class="fbtn" id="fb-overdue" onclick="toggleF('Overdue')"><i class="fa-solid fa-triangle-exclamation"></i> Overdue</button>
+        <button class="fbtn" id="fb-starred" onclick="toggleF('Starred')"><i class="fa-solid fa-star"></i> Starred</button>
+        <div class="fspacer"></div>
+        <select class="fsel" id="f-sort" onchange="renderTasks()">
+          <option value="created">Date Created</option>
+          <option value="due">Due Date</option>
+          <option value="priority">Priority</option>
+          <option value="title">A–Z</option>
+        </select>
+      </div>
+
+      <div id="view-list"><div id="task-list"></div></div>
+
+      <div id="view-kanban" style="display:none">
+        <div class="kanban-grid">
+          <div class="k-col">
+            <div class="k-col-head">
+              <div class="k-col-title"><div class="k-dot kd-todo"></div> To Do</div>
+              <span class="k-cnt" id="kc-todo">0</span>
+            </div>
+            <div id="k-todo"></div>
+          </div>
+          <div class="k-col">
+            <div class="k-col-head">
+              <div class="k-col-title"><div class="k-dot kd-ip"></div> In Progress</div>
+              <span class="k-cnt" id="kc-ip">0</span>
+            </div>
+            <div id="k-ip"></div>
+          </div>
+          <div class="k-col">
+            <div class="k-col-head">
+              <div class="k-col-title"><div class="k-dot kd-done"></div> Done</div>
+              <span class="k-cnt" id="kc-done">0</span>
+            </div>
+            <div id="k-done"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="view-calendar" style="display:none">
+        <div class="cal-nav">
+          <button class="icon-btn" onclick="calNav(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+          <div class="cal-month" id="cal-lbl"></div>
+          <button class="icon-btn" onclick="calNav(1)"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+        <div class="cal-grid" id="cal-head"></div>
+        <div class="cal-grid" id="cal-body" style="margin-top:4px"></div>
+      </div>
+    </div>
+
+    <!-- ══ PAGE: ANALYTICS ══ -->
+    <div id="pg-analytics" class="page-wrap">
+      <div class="sh"><div class="sh-title">Analytics</div><span class="badge-blue">Overview</span></div>
+
+      <div class="mini-stats">
+        <div class="stat-card sc-blue">
+          <div class="stat-ico si-blue"><i class="fa-solid fa-chart-simple"></i></div>
+          <div class="stat-val" id="a-total">0</div>
+          <div class="stat-lbl">Total Tasks</div>
+        </div>
+        <div class="stat-card sc-green">
+          <div class="stat-ico si-green"><i class="fa-solid fa-percent"></i></div>
+          <div class="stat-val" id="a-rate">0%</div>
+          <div class="stat-lbl">Completion Rate</div>
+        </div>
+        <div class="stat-card sc-warn">
+          <div class="stat-ico si-warn"><i class="fa-solid fa-calendar-check"></i></div>
+          <div class="stat-val" id="a-streak">0</div>
+          <div class="stat-lbl">Day Streak</div>
+        </div>
+        <div class="stat-card sc-purple">
+          <div class="stat-ico si-purple"><i class="fa-solid fa-crosshairs"></i></div>
+          <div class="stat-val" id="a-focus">0</div>
+          <div class="stat-lbl">Focus Sessions</div>
+        </div>
+      </div>
+
+      <!-- Full-width weekly bar chart -->
+      <div class="chart-card" style="margin-bottom:14px">
+        <div class="chart-head">
+          <span class="chart-title">Weekly Completion</span>
+          <span class="chart-sub" id="week-total">0 tasks this week</span>
+        </div>
+        <div class="bar-chart" id="week-chart"></div>
+      </div>
+
+      <!-- Horizontally scrollable: donut + heatmap -->
+      <div class="analytics-scroll" id="analytics-scroll">
+        <div class="chart-card">
+          <div class="chart-head"><span class="chart-title">Category Breakdown</span></div>
+          <div class="ring-wrap">
+            <svg width="110" height="110" viewBox="0 0 110 110" id="ring-svg" style="flex-shrink:0">
+              <circle cx="55" cy="55" r="42" fill="none" stroke="rgba(20,40,100,.5)" stroke-width="16"/>
+              <text x="55" y="60" text-anchor="middle" fill="#94a3cf" font-size="13" font-family="Plus Jakarta Sans" font-weight="700" id="ring-center">—</text>
+            </svg>
+            <div class="ring-legend" id="ring-legend"></div>
+          </div>
+        </div>
+
+        <div class="chart-card" style="min-width:320px">
+          <div class="chart-head"><span class="chart-title">Activity Heatmap</span></div>
+          <div class="hm-grid" id="heatmap"></div>
+          <div class="hm-legend">
+            <span>Less</span>
+            <div style="width:11px;height:11px;border-radius:2px;background:rgba(20,40,100,.4)"></div>
+            <div class="hm-cell hm-v1" style="width:11px;height:11px;border-radius:2px"></div>
+            <div class="hm-cell hm-v2" style="width:11px;height:11px;border-radius:2px"></div>
+            <div class="hm-cell hm-v3" style="width:11px;height:11px;border-radius:2px"></div>
+            <div class="hm-cell hm-v4" style="width:11px;height:11px;border-radius:2px"></div>
+            <span>More</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PAGE: HABITS ══ -->
+    <div id="pg-habits" class="page-wrap">
+      <div class="sh">
+        <div class="sh-title">Habit Tracker</div>
+        <button class="btn-primary" onclick="openHabitModal()"><i class="fa-solid fa-plus"></i> New Habit</button>
+      </div>
+      <div id="habit-list"></div>
+    </div>
+
+    <!-- ══ PAGE: NOTES ══ -->
+    <div id="pg-notes" class="page-wrap">
+      <div class="sh">
+        <div class="sh-title">Quick Notes</div>
+        <button class="btn-primary" onclick="openNoteModal()"><i class="fa-solid fa-plus"></i> New Note</button>
+      </div>
+      <div class="notes-grid" id="notes-grid"></div>
+    </div>
+
+    <!-- ══ PAGE: SETTINGS ══ -->
+    <div id="pg-settings" class="page-wrap">
+      <div class="sh"><div class="sh-title">Settings</div></div>
+
+      <!-- Profile Card -->
+      <div class="profile-block">
+        <div class="prof-av-circle" id="prof-av-big" onclick="triggerPhotoUpload()" title="Click to change photo">
+          <span id="prof-av-init">AU</span>
+          <i class="fa-solid fa-camera prof-cam-ico"></i>
+        </div>
+        <div class="profile-info">
+          <input class="profile-name-input" id="set-name" type="text" placeholder="Your name" oninput="updateName()" onclick="event.stopPropagation()"/>
+          <div class="profile-hint">Click avatar to upload photo · Type your name above</div>
+        </div>
+        <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="handlePhotoUpload(this)"/>
+      </div>
+
+      <div class="settings-card">
+        <div class="sc-title">Preferences</div>
+        <div class="s-row">
+          <div><div class="s-lbl">Show Completed Tasks</div><div class="s-desc">Display done tasks in the list view</div></div>
+          <div class="toggle on" id="tog-completed" onclick="togSet('showCompleted',this)"></div>
+        </div>
+        <div class="s-row">
+          <div><div class="s-lbl">Focus Mode Auto-start</div><div class="s-desc">Launch timer when adding a task</div></div>
+          <div class="toggle" id="tog-autofocus" onclick="togSet('autoFocus',this)"></div>
+        </div>
+      </div>
+
+      <div class="settings-card">
+        <div class="sc-title">Data Management</div>
+        <div class="s-row">
+          <div>
+            <div class="s-lbl">Export Data</div>
+            <div class="s-desc">Download all tasks, habits & notes</div>
+          </div>
+          <button class="btn-export-import" onclick="exportAll()"><i class="fa-solid fa-download"></i> Export</button>
+        </div>
+        <div class="s-row">
+          <div>
+            <div class="s-lbl">Import Data</div>
+            <div class="s-desc">Restore from a previous backup</div>
+          </div>
+          <button class="btn-export-import" onclick="triggerImport()"><i class="fa-solid fa-upload"></i> Import</button>
+        </div>
+        <div class="s-row">
+          <div>
+            <div class="s-lbl">Clear All Data</div>
+            <div class="s-desc">Permanently delete everything</div>
+          </div>
+          <button class="btn-danger-clear" onclick="clearAll()"><i class="fa-solid fa-trash"></i> Clear</button>
+        </div>
+        <input type="file" id="import-input" accept=".json" style="display:none" onchange="handleImport(this)"/>
+      </div>
+    </div>
+
+  </div><!-- /content-area -->
+</div><!-- /main -->
+</div><!-- /app-wrap -->
+
+<!-- ══ MODALS ══ -->
+<!-- Task Modal -->
+<div class="overlay" id="task-overlay">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-title" id="task-modal-title">New Task</div>
+      <button class="modal-close" onclick="closeTaskModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="fg">
+      <label class="flabel">Title *</label>
+      <input class="finput" id="m-title" type="text" placeholder="What needs to be done?"/>
+    </div>
+    <div class="fg">
+      <label class="flabel">Description</label>
+      <textarea class="ftextarea" id="m-desc" placeholder="Optional details…"></textarea>
+    </div>
+    <div class="frow">
+      <div class="fg" style="margin-bottom:0">
+        <label class="flabel">Category</label>
+        <select class="fselect" id="m-cat">
+          <option value="work">Work</option>
+          <option value="personal">Personal</option>
+          <option value="health">Health</option>
+          <option value="learning">Learning</option>
+          <option value="finance">Finance</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="fg" style="margin-bottom:0">
+        <label class="flabel">Priority</label>
+        <select class="fselect" id="m-priority">
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+          <option value="low">Low</option>
+        </select>
+      </div>
+    </div>
+    <div class="frow" style="margin-top:15px">
+      <div class="fg" style="margin-bottom:0">
+        <label class="flabel">Due Date</label>
+        <input class="finput" id="m-due" type="date"/>
+      </div>
+      <div class="fg" style="margin-bottom:0">
+        <label class="flabel">Due Time</label>
+        <input class="finput" id="m-time" type="time"/>
+      </div>
+    </div>
+    <div class="fg" style="margin-top:15px">
+      <label class="flabel">Status</label>
+      <select class="fselect" id="m-status">
+        <option value="todo">To Do</option>
+        <option value="inprog">In Progress</option>
+        <option value="done">Done</option>
+      </select>
+    </div>
+    <div class="form-btns">
+      <button class="btn-ghost" onclick="closeTaskModal()">Cancel</button>
+      <button class="btn-primary" onclick="saveTask()"><i class="fa-solid fa-check"></i> Save Task</button>
+    </div>
+  </div>
+</div>
+
+<!-- Habit Modal -->
+<div class="overlay" id="habit-overlay">
+  <div class="modal-box" style="max-width:360px">
+    <div class="modal-head">
+      <div class="modal-title">New Habit</div>
+      <button class="modal-close" onclick="closeHabitModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="fg">
+      <label class="flabel">Habit Name *</label>
+      <input class="finput" id="hm-name" type="text" placeholder="e.g. Meditate 10 minutes"/>
+    </div>
+    <div class="fg">
+      <label class="flabel">Frequency</label>
+      <select class="fselect" id="hm-freq">
+        <option value="daily">Daily</option>
+        <option value="weekdays">Weekdays</option>
+      </select>
+    </div>
+    <div class="form-btns">
+      <button class="btn-ghost" onclick="closeHabitModal()">Cancel</button>
+      <button class="btn-primary" onclick="saveHabit()"><i class="fa-solid fa-check"></i> Add Habit</button>
+    </div>
+  </div>
+</div>
+
+<!-- Note Modal -->
+<div class="overlay" id="note-overlay">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-title" id="note-modal-title">New Note</div>
+      <button class="modal-close" onclick="closeNoteModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="fg">
+      <label class="flabel">Title</label>
+      <input class="finput" id="nm-title" type="text" placeholder="Note title…"/>
+    </div>
+    <div class="fg">
+      <label class="flabel">Content</label>
+      <textarea class="ftextarea" id="nm-content" style="min-height:140px" placeholder="Write here…"></textarea>
+    </div>
+    <div class="form-btns">
+      <button class="btn-ghost" onclick="closeNoteModal()">Cancel</button>
+      <button class="btn-primary" onclick="saveNote()"><i class="fa-solid fa-check"></i> Save Note</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FOCUS SCREEN ══ -->
+<div id="focus-screen">
+  <button class="focus-close" onclick="closeFocus()"><i class="fa-solid fa-xmark"></i></button>
+  <div class="focus-inner">
+    <div class="focus-badge"><i class="fa-solid fa-crosshairs"></i> Focus Mode</div>
+    <div class="focus-task-nm" id="f-task-name">Select a task to focus on</div>
+    <div class="focus-phase" id="f-phase-lbl">Work Session</div>
+    <div class="focus-time" id="f-timer">25:00</div>
+    <div class="focus-ctrls">
+      <button class="fc-btn" onclick="resetPom()"><i class="fa-solid fa-rotate-left"></i></button>
+      <button class="fc-btn main" onclick="togglePom()" id="f-play"><i class="fa-solid fa-play"></i></button>
+      <button class="fc-btn" onclick="skipPom()"><i class="fa-solid fa-forward-step"></i></button>
+    </div>
+    <div class="focus-sessions-lbl" id="f-sessions">Session 1 / 4</div>
+  </div>
+</div>
+
+<div id="toast-wrap"></div>
+
+<!-- Scripts -->
+<script src="js/app.js"></script>
+<script src="js/tasks.js"></script>
+<script src="js/habits.js"></script>
+<script src="js/notes.js"></script>
+<script src="js/analytics.js"></script>
+<script src="js/settings.js"></script>
+</body>
+</html>
