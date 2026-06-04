@@ -1,206 +1,302 @@
-# AuraTask - Professional Task Management Application
+<div align="center">
 
-> Built with **GitHub Copilot** and **Claude AI** for **Microsoft AI Skills Fest 2026 - Agents League Hackathon**
+# ✨ AuraTask
+### Professional Task Management Application
 
-## 🎯 Overview
+*Organize your day. Build better habits. Stay focused.*
 
-**AuraTask** is a modern, feature-rich task management application with a beautiful dark theme and intuitive user interface. It combines productivity features including task tracking, habit monitoring, quick notes, analytics, and a Pomodoro-style focus timer.
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-aurataskv1.netlify.app-00C7B7?style=for-the-badge)](https://aurataskv1.netlify.app)
+[![GitHub Copilot](https://img.shields.io/badge/Built_with-GitHub_Copilot-181717?style=for-the-badge&logo=github)](https://github.com/features/copilot)
+[![AI Skills Fest](https://img.shields.io/badge/Microsoft-AI_Skills_Fest_2026-0078D4?style=for-the-badge&logo=microsoft)](https://developer.microsoft.com/en-us/ai-skills-fest)
+[![Track](https://img.shields.io/badge/Track-Creative_Apps-6366F1?style=for-the-badge)](https://aka.ms/AgentsLeague/AISF)
+[![License](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)](LICENSE)
+
+**Submitted to Microsoft Agents League @ AI Skills Fest 2026 — Creative Apps Track**
+**Developer: S.M. Rafiu · [@smrafiu](https://github.com/smrafiu)**
+
+</div>
+
+---
+
+## 📖 Overview
+
+**AuraTask** is a modern, full-featured task management web application built with a sleek dark dashboard. It brings together everything you need to stay productive — task management, habit tracking, quick notes, data analytics, and a built-in Pomodoro focus timer — in a single, fast, offline-capable app that runs entirely in your browser.
+
+**No backend. No login. No dependencies. Just open and use.**
+
+🔗 **Live App → [aurataskv1.netlify.app](https://aurataskv1.netlify.app)**
+📁 **Repository → [github.com/smrafiu/AuraTask](https://github.com/smrafiu/AuraTask)**
+
+---
+
+## 🤖 How GitHub Copilot Built AuraTask
+
+This entire project was developed using **GitHub Copilot** (free plan) at [github.com/copilot](https://github.com/copilot) — from structuring the project to fixing real bugs across multiple files.
+
+### The Build Process
+
+**Phase 1 — Design & Prototype**
+A complete single-file HTML prototype was created with all UI, logic, and styling. This became the foundation handed to Copilot.
+
+**Phase 2 — GitHub Copilot Structures the Project**
+Using a master prompt, GitHub Copilot took the full prototype and:
+- Split 1,200+ lines of HTML into a clean professional multi-file architecture
+- Created `css/style.css` and six separate `js/` modules
+- Rebuilt `index.html` with all file links properly connected
+- Generated the initial `README.md`
+- Produced every file using Copilot's **Allow / Create File** workflow — one prompt, full project output
+
+**Phase 3 — Bug Fixes with Copilot Assistance**
+GitHub Copilot identified and helped fix real issues discovered during testing:
+
+| Bug | Root Cause | Fix Applied |
+|---|---|---|
+| Mobile sidebar footer invisible | `flex` overflow hiding footer | Added `min-height:0` and `flex-shrink:0` |
+| Typing name triggered photo upload | `onclick` on entire profile card | Moved handler to avatar circle only |
+| Search bar not filtering | `doSearch()` not wired to all views | Reconnected function to tasks, notes, habits |
+| List/Kanban/Calendar tabs had side gaps | `width:fit-content` on tab container | Changed to `width:100%` with `flex:1` tabs |
+| Analytics chart overflowed into text | No height cap on bar elements | Capped at `100px`, added `overflow:hidden` |
+| Clear All Data button looked unstyled | Missing danger button CSS | Redesigned with red gradient matching UI |
+| Settings profile spacing uneven | `align-items:flex-start` misalignment | Fixed with `center` alignment and `min-width:0` |
+
+**Phase 4 — Deployment**
+The final project was connected to **Netlify** from this GitHub repository and deployed in minutes with zero configuration.
+
+### What GitHub Copilot Made Possible
+
+| Without GitHub Copilot | With GitHub Copilot |
+|---|---|
+| Manually splitting 1,200+ lines by hand | Clean file structure generated in minutes |
+| Writing repetitive module boilerplate | Instant scaffolding with correct imports |
+| Debugging across files alone | AI-assisted bug detection and fixes |
+| Hours of project setup | Production-ready architecture immediately |
+| Writing documentation from scratch | README generated with full project context |
+
+---
+
+## 🏗️ Architecture
+
+```
+AuraTask — Browser App
+│
+├── index.html                 ← Entry point, layout, modal shells
+│
+├── css/
+│   └── style.css              ← Dark theme, CSS variables, animations, responsive
+│
+└── js/
+    ├── app.js                 ← Boot, state management, navigation, global search
+    ├── tasks.js               ← Task CRUD, List / Kanban / Calendar views, filters
+    ├── habits.js              ← Habit tracking, daily logging, 7-day streak grid
+    ├── notes.js               ← Notes create, delete, full-text search
+    ├── analytics.js           ← Bar chart, donut chart, 14-week heatmap
+    └── settings.js            ← Profile, preferences, Pomodoro timer, export/import
+
+Data layer: Browser localStorage (at4_tasks, at4_habits, at4_notes, at4_cfg, at4_stats)
+Hosting:    Netlify (auto-deploy from GitHub main branch)
+AI Tool:    GitHub Copilot (file structure, module generation, bug fixes, docs)
+```
+
+---
 
 ## ✨ Features
 
 ### 📋 Task Management
-- **Multiple Views**: List, Kanban board, and Calendar views
-- **Smart Filtering**: Filter by category, priority, due date, and more
-- **Task Status Tracking**: To Do, In Progress, Done
-- **Rich Task Details**: Descriptions, due dates, times, priorities
-- **Starred Tasks**: Quick access to important tasks
+- Create, edit, delete tasks with title, description, priority, category, due date and time
+- **3 Views** — List, Kanban board, Calendar
+- **Smart Filters** — Category, Priority, Overdue, Starred, Today
+- Sort by Date Created, Due Date, or Priority
+- Task status: To Do → In Progress → Done
+- Starred tasks for quick access
 
 ### 🔥 Habit Tracker
-- **Daily Habit Logging**: Track habits with visual streak counter
-- **Weekly Overview**: See a 7-day history of completed habits
-- **Frequency Options**: Daily or weekdays-only habits
+- Add habits with custom icons and daily or weekdays frequency
+- Visual 7-day streak grid with streak counter
+- Mark habits complete each day
 
 ### 📝 Quick Notes
-- **Fast Note Creation**: Capture ideas quickly
-- **Grid Layout**: Organized note display
-- **Full Text Search**: Find notes instantly
+- Instant note creation with grid display
+- Full-text search across all notes
+- Note count and quick delete
 
 ### 📊 Analytics Dashboard
-- **Completion Rate**: Track overall productivity
-- **Weekly Chart**: Visual completion trends
-- **Category Breakdown**: Donut chart by task category
-- **Activity Heatmap**: 14-week activity visualization
-- **Statistics**: Total tasks, streaks, and focus sessions
+- Weekly task completion bar chart
+- Category breakdown donut chart
+- 14-week productivity activity heatmap
+- Total tasks, streaks, and focus session statistics
 
-### ⏱️ Focus Mode (Pomodoro Timer)
-- **25/5 Timer**: Standard work/break intervals
-- **Session Tracking**: Monitor completed focus sessions
-- **Visual Feedback**: Full-screen distraction-free mode
-- **Controls**: Play, pause, skip, and reset functions
+### ⏱️ Focus Mode — Pomodoro Timer
+- 25-minute work / 5-minute break cycles
+- Full-screen distraction-free mode
+- 4-session cycle tracking with auto-advance
 
-### ⚙️ Settings & Customization
-- **Profile Management**: Custom name and avatar
-- **Preferences**: Toggle completed tasks visibility
-- **Data Management**: Export/import data as JSON backup
-- **Local Storage**: All data stored securely in browser
+### ⚙️ Settings & Data
+- Custom profile name and avatar photo upload
+- Show/hide completed tasks toggle
+- Export all data as JSON backup
+- Import data from a previous backup
+- Clear all data with confirmation
 
-## 🏗️ Project Structure
+### ⌨️ Keyboard Shortcuts
+
+| Shortcut | Action |
+|---|---|
+| `Ctrl+N` / `Cmd+N` | New task |
+| `Ctrl+K` / `Cmd+K` | Focus search |
+| `Escape` | Close modal |
+
+---
+
+## 🗂️ Project Structure
 
 ```
-auratask/
-├── index.html          # Main HTML structure
+AuraTask/
+├── index.html          # Main HTML structure and layout
 ├── css/
-│   └── style.css       # Complete styling with dark theme
+│   └── style.css       # Complete dark theme styling
 ├── js/
-│   ├── app.js          # Core initialization & utilities
-│   ├── tasks.js        # Task management logic
-│   ├── habits.js       # Habit tracking functionality
-│   ├── notes.js        # Notes management
-│   ├── analytics.js    # Analytics & charts rendering
-│   └── settings.js     # Settings & state management
-├── assets/             # Placeholder for future assets
+│   ├── app.js          # Core state, navigation, search
+│   ├── tasks.js        # Task management and views
+│   ├── habits.js       # Habit tracking and streaks
+│   ├── notes.js        # Notes module
+│   ├── analytics.js    # Charts and data visualization
+│   └── settings.js     # Settings, Pomodoro, profile
+├── assets/             # Static assets
 └── README.md           # This file
 ```
 
+---
+
 ## 🚀 Getting Started
 
-### Prerequisites
-- Modern web browser (Chrome, Firefox, Safari, Edge)
-- No backend or build process required
+**Requirements:** Any modern browser — Chrome, Firefox, Safari, Edge. No build tools needed.
 
-### Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/smrafiu/AuraTask.git
-   cd AuraTask
-   ```
+```bash
+# Clone the repository
+git clone https://github.com/smrafiu/AuraTask.git
+cd AuraTask
 
-2. Open `index.html` in your web browser or serve it locally:
-   ```bash
-   # Using Python 3
-   python -m http.server 8000
-   
-   # Using Python 2
-   python -m SimpleHTTPServer 8000
-   
-   # Using Node.js (with http-server)
-   npx http-server
-   ```
+# Open directly in browser
+open index.html
 
-3. Navigate to `http://localhost:8000` in your browser
+# Or serve locally
+npx http-server
+# → http://localhost:8080
+```
 
-## 💾 Data Storage
+---
 
-All application data is stored locally in your browser's **localStorage**:
-- `at4_tasks` - Task data
-- `at4_habits` - Habit tracking data
-- `at4_notes` - Notes
-- `at4_cfg` - User preferences
-- `at4_stats` - Statistics (focus sessions, streaks)
-- `at4_name` - User profile name
-- `at4_avatar` - User profile avatar (base64)
+## 💾 Data & Privacy
 
-## 🎨 Design Highlights
+All AuraTask data lives entirely in your browser's **localStorage**:
 
-### Theme
-- **Dark Mode**: Eye-friendly blue and black color scheme
-- **Modern Gradients**: Beautiful gradient accents throughout
-- **Smooth Animations**: Polished transitions and effects
-- **Responsive Design**: Works on desktop and tablet
+| Key | Stores |
+|---|---|
+| `at4_tasks` | All task data |
+| `at4_habits` | Habit records and streaks |
+| `at4_notes` | Notes content |
+| `at4_cfg` | User preferences |
+| `at4_stats` | Focus sessions and statistics |
+| `at4_name` | Profile display name |
+| `at4_avatar` | Profile photo (base64) |
 
-### Color Palette
-- Primary Blue: `#3b82f6`
-- Cyan Accent: `#06b6d4`
-- Success Green: `#10b981`
-- Warning Orange: `#f59e0b`
-- Danger Red: `#ef4444`
+✅ No server · ✅ No login · ✅ No tracking · ✅ No ads · ✅ Full user control
 
-### Typography
-- **Headers**: Plus Jakarta Sans (bold, modern)
-- **Body**: Inter (clean, readable)
+---
 
-## 🎮 Keyboard Shortcuts
+## 🎨 Design System
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl+N` / `Cmd+N` | New task |
-| `Ctrl+K` / `Cmd+K` | Focus search |
-| `Escape` | Close modals |
+- **Theme** — Dark mode with blue/cyan accent system
+- **Typography** — Plus Jakarta Sans (headings) + Inter (body) via Google Fonts
+- **Icons** — Font Awesome 6
+- **Layout** — CSS Grid + Flexbox, fully responsive
 
-## 📦 Technologies Used
+| Token | Color |
+|---|---|
+| Primary Blue | `#3b82f6` |
+| Cyan Accent | `#06b6d4` |
+| Success Green | `#10b981` |
+| Warning Orange | `#f59e0b` |
+| Danger Red | `#ef4444` |
 
-- **HTML5**: Semantic markup
-- **CSS3**: Modern styling with CSS variables and Grid/Flexbox
-- **Vanilla JavaScript**: No dependencies, pure JS implementation
-- **Font Awesome 6**: Icon library
-- **Google Fonts**: Premium typography
+---
 
-## 🔧 Module Breakdown
+## 📦 Tech Stack
 
-### app.js
-Core functionality including initialization, state management, and utilities
-
-### tasks.js
-Complete task management: CRUD operations, filtering, sorting, views (List/Kanban/Calendar)
-
-### habits.js
-Habit tracking with streak calculation and weekly visualization
-
-### notes.js
-Quick note management with search and deletion
-
-### analytics.js
-Data visualization: weekly charts, category breakdown, activity heatmap
-
-### settings.js
-User preferences, profile management, import/export, Pomodoro timer, focus mode
-
-## 🚀 Deployment
-
-This is a static web application and can be deployed to:
-- **GitHub Pages**
-- **Netlify**
-- **Vercel**
-- **Any static web hosting service**
-
-Simply upload the entire folder to your hosting provider.
-
-## 🔐 Privacy & Security
-
-- ✅ All data stored locally in browser
-- ✅ No server communication
-- ✅ No tracking or analytics
-- ✅ No ads or third-party services
-- ✅ Complete user control over data
-
-## 📝 License
-
-This project is open source. Feel free to use, modify, and distribute as needed.
-
-## 👨‍💻 Built By
-
-Created with **GitHub Copilot** and **Claude AI** for **Microsoft AI Skills Fest 2026 - Agents League Hackathon**
-
-### Contributors
-- **S.M. Rafiu** - Project Lead
+| Technology | Role |
+|---|---|
+| HTML5 | Semantic structure |
+| CSS3 | Styling, variables, animations |
+| Vanilla JavaScript | All app logic, zero dependencies |
+| Font Awesome 6 | UI icons |
+| Google Fonts | Typography |
+| localStorage | Data persistence |
+| Netlify | Hosting and deployment |
+| **GitHub Copilot** | **Code generation, architecture, bug fixes** |
 
 ---
 
 ## 🎯 Future Enhancements
 
-- [ ] Dark/Light theme toggle
-- [ ] Multiple workspaces
+- [ ] Light theme toggle
 - [ ] Recurring tasks
-- [ ] Task notifications
-- [ ] Collaborative features
+- [ ] Push notifications
+- [ ] Cloud sync / account
 - [ ] Mobile app (React Native)
-- [ ] Cloud sync
-- [ ] Advanced analytics
-
-## 📞 Support
-
-For issues, suggestions, or contributions, please visit the [GitHub repository](https://github.com/smrafiu/AuraTask)
+- [ ] Collaborative workspaces
+- [ ] Advanced reporting
 
 ---
 
+## 🏆 Hackathon Submission — Microsoft Agents League @ AI Skills Fest 2026
+
+| Field | Details |
+|---|---|
+| **Event** | Microsoft AI Skills Fest 2026 |
+| **Hackathon** | Agents League @ AI Skills Fest |
+| **Track** | Creative Apps |
+| **Challenge** | Build innovative creative applications using AI-assisted development (GitHub Copilot) |
+| **Required Tool** | GitHub Copilot |
+| **Developer** | S.M. Rafiu |
+| **Live App** | https://aurataskv1.netlify.app |
+| **Repository** | https://github.com/smrafiu/AuraTask |
+
+### Judging Criteria (as per official rules)
+
+| Criteria | Weight | How AuraTask Addresses It |
+|---|---|---|
+| Accuracy & Relevance | 20% | Fully working Creative App built with GitHub Copilot |
+| Reasoning & Multi-step Thinking | 20% | Modular architecture with interconnected JS modules |
+| Creativity & Originality | 15% | Full productivity suite in a single no-dependency app |
+| User Experience & Presentation | 15% | Polished dark UI, smooth animations, keyboard shortcuts |
+| Reliability & Safety | 20% | localStorage-only, no external calls, data export/import |
+| Community Vote (Discord) | 10% | — |
+
+---
+
+## 👨‍💻 Developer
+
+<div align="center">
+
+**S.M. Rafiu**
+GitHub: [@smrafiu](https://github.com/smrafiu)
+
+*Built with GitHub Copilot for Microsoft AI Skills Fest 2026 — Agents League Hackathon*
+
+</div>
+
+---
+
+## 📝 License
+
+Open source — free to use, modify, and distribute.
+
+---
+
+<div align="center">
+
 **Enjoy organizing your life with AuraTask! ✨**
+
+[Live Demo](https://aurataskv1.netlify.app) · [Repository](https://github.com/smrafiu/AuraTask) · [Hackathon](https://aka.ms/AgentsLeague/AISF)
+
+</div>
